@@ -1,153 +1,85 @@
-# ![](https://ga-dash.s3.amazonaws.com/production/assets/logo-9f88ae6c9c3871690e33280fcf557f33.png) Kaggle Competition - Starter
+# ![](https://ga-dash.s3.amazonaws.com/production/assets/logo-9f88ae6c9c3871690e33280fcf557f33.png) Project 4 - West Nile Virus Prediction
 
-## Introduction
+## Problem Statement
 
-Welcome to your first week of work at the Disease And Treatment Agency, division of Societal Cures In Epidemiology and New Creative Engineering (DATA-SCIENCE). Time to get to work!
+Our team, as part of the Chicago Department of Public Health (CDPH), has been tasked with predicting the next outbreak of the West Nile Virus (WNV) in Chicago. This information would be useful for the City of Chicago and the CDPH to identify areas of high risk of outbreak in advance and to allocate resources accordingly. We will also perform a cost-benefit analysis of the current vector control program and make recommendation on the next steps going forward.
 
 Due to the recent epidemic of West Nile Virus in the Windy City, we've had the Department of Public Health set up a surveillance and control system. We're hoping it will let us learn something from the mosquito population as we collect data over time. Pesticides are a necessary evil in the fight for public health and safety, not to mention expensive! We need to derive an effective plan to deploy pesticides throughout the city, and that is **exactly** where you come in!
 
-## Dataset
+## Executive Summary
 
-The dataset, along with description, can be found here: [https://www.kaggle.com/c/predict-west-nile-virus/](https://www.kaggle.com/c/predict-west-nile-virus/).
+For this project, datasets containing information such as mosquitos species caught, number of mosquitoes caught, presence of WNV in the mosquitos and coordinate location of traps were used. Information on the date and location of spraying and various weather parameters were also utilized. The following summarises the analysis process:
 
-**This is also where you will be submitting your code for evaluation**. The public leaderboard uses roughly 30% of the dataset to score an AUC (Area Under Curve) metric.
+1. Impute or remove missing or duplicated data from the train, test, weather and spray datasets
 
-> If you do not already have a Kaggle account, you will need to sign up on the website.  Also note that you will be submitting a "Late Submission" on Kaggle because the official competition has ended.  You can use the leaderboard to see how your results compare against roughly 1300 other data science teams!
+2. Merge the train and spray datasets and perform EDA on the effect of spraying on presence of WNV and number of mosquitos
 
-You can submit predictions as many times as you want to Kaggle, but there is a limit of 5 submissions per day.  Be intentional with your submissions!
+3. Merge the train and weather datasets and perform feature engineering and selection by evaluating the ROC_AUC score of models against the selected features iteratively 
 
+4. Tune the hyperparameters for 18 models by gridsearching and choose the best one based on ROC_AUC score on the train set, the CV ROC_AUC score on the train set , the ROC_AUC score on the test set and finally the Kaggle score
 
-#### Navigating Group Work
+The best model selected was the XGBoost Classifier (Model 18) as even though it has a lower ROC_AUC than the Logistic Regression (Model 17), it has a higher sensitivity which is important because Chicago city officials might make expensive decisions on mosquito-eradication methods (spray in areas we predict to be positive, and don't spray in areas we predict to be negative). Therefore it is also important to have as high true positive as possible, and as low false negative as possible. This points to using sensitivity as a secondary metric for us to use as assessment since ROC_AUC is quite close between Models 17 and 18.
 
-This project will be executed as a group.  To make your team as effective and efficient as possible you should do the create a shared GitHub repo and project planning document as described in the deliverables section below.
+The following table summarizes the performance of all 18 models:
 
-## Deliverables
-
-**GitHub Repo**
-
-1. Create a GitHub repository for the group. Each member should be added as a contributor.
-2. Retrieve the dataset and upload it into a directory named `assets`.
-3. Generate a .py or .ipynb file that imports the available data.
-
-**Project Planning**
-
-1. Define your deliverable - what is the end result?
-2. Break that deliverable up into its components, and then go further down the rabbit hole until you have actionable items. Document these using a project managment tool to track things getting done.  The tool you use is up to you; it could be Trello, a spreadsheet, GitHub issues, etc.
-3. Begin deciding priorities for each task. These are subject to change, but it's good to get an initial consensus. Order these priorities however you would like.
-4. You planning documentation (or a link to it) should be included in your GitHub repo.
-
-**EDA**
-
-1. Describe the data. What does it represent? What types are present? What does each data points' distribution look like? Discuss these questions, and your own, with your partners. Document your conclusions.
-2. What kind of cleaning is needed? Document any potential issues that will need to be resolved.
-
-**Note:** As you know, EDA is the single most important part of data science. This is where you should be spending most of your time. Knowing your data, and understanding the status of its integrity, is what makes or breaks a project.
-
-**Modeling**
-
-1. The goal is of course to build a model and make predictions that the city of Chicago can use when it decides where to spray pesticides! Your team should have a clean Jupyter Notebook that shows your EDA process, your modeling and predictions.
-2. Conduct a cost-benefit analysis. This should include annual cost projections for various levels of pesticide coverage (cost) and the effect of these various levels of pesticide coverage (benefit). *(Hint: How would we quantify the benefit of pesticide spraying? To get "maximum benefit," what does that look like and how much does that cost? What if we cover less and therefore get a lower level of benefit?)*
-3. Your final submission CSV should be in your GitHub repo.
-
-**Presentation**
-* Audience: You are presenting to members of the CDC. Some members of the audience will be biostatisticians and epidemiologists who will understand your models and metrics and will want more information. Others will be decision-makers, focusing almost exclusively on your cost-benefit analysis. Your job is to convince both groups of the best course of action in the same meeting and be able to answer questions that either group may ask.
-* The length of your presentation should be about 10 minutes (a rough guideline: 1 minute intro, 5 minutes on model, 2 minutes on cost-benefit analysis, 2 minute recommendations/conclusion).  Touch base with your local instructor... er, manager... for specific logistic requirements!
-
----
-
-**Your project is due at 13 Aug 2021 09:00AM.**
-
----
-
-### Project Feedback + Evaluation
-
-For all projects, students will be evaluated on a simple 4 point scale (0-3 inclusive). Instructors will use this rubric when scoring student performance on each of the core project requirements:
-
-Score | Expectations
------ | ------------
-**0** | _Does not meet expectations. Try again._
-**1** | _Approaching expectations. Getting there..._
-**2** | _Meets expectations. Great job._
-**3** | _Surpasses expectations. Brilliant!_
-
-### Rubric
-
-Your final assessment ("grade" if you will) will be calculated based on a topical rubric (see below).  For each category, you will receive a score of 0-3.  From the rubric you can see descriptions of each score and what is needed to attain those scores.
-
-For Project 3 the evaluation categories are as follows:
-- [Organization](#organization)
-- [Data Structures](#data-structures)
-- [Python Syntax and Control Flow](#python-syntax-and-control-flow)
-- [Probability and Statistics](#probability-and-statistics)
-- [Modeling](#modeling)
-- [Presentation](#presentation)
-
-#### Organization
-
-Clearly commented, annotated and sectioned Jupyter notebook or Python script.  Comments and annotations add clarity, explanation and intent to the work.  Notebook is well-structured with title, author and sections. Assumptions are stated and justified.
+| Model No. | Classifier | CV Score (train) | ROC_AUC (train) | ROC_AUC (test) | Kaggle Score | Runtime (sec) |
+|---|---|---|---|---|---|---|
+| 1 | LogisticRegression(random_state=42, solver='liblinear') | 0.989000 | 0.994000 | 0.830000 | 0.684000 | 7 |
+| 2 | KNeighborsClassifier() | 0.919000 | 1.000000 | 0.7776000 | 0.596000 | 24 |
+| 4 | RandomForestClassifier(random_state=42) | 0.979000 | 0.996000 | 0.804000 | 0.643000 | 33 |
+| 4 | ExtraTreesClassifier(random_state=42) | 0.989000 | 1.000000 | 0.809000 | 0.710000 | 93 |
+| 5 | SVC(max_iter=10000, random_state=42) | 0.973000 | 0.981000 | 0.803000 | 0.598000 | 136 |
+| 6 | XGBClassifier(base_score=None, booster=None, colsample_bylevel=None, <br>colsample_bynode=None, colsample_bytree=None, gamma=None, gpu_id=None, <br>importance_type='gain', interaction_constraints=None, learning_rate=None, <br>max_delta_step=None, max_depth=None, min_child_weight=None, missing=nan, <br>monotone_constraints=None, n_estimators=100, n_jobs=None, num_parallel_tree=None, <br>random_state=42, reg_alpha=None, reg_lambda=None, scale_pos_weight=None, <br>subsample=None, tree_method=None, validate_parameters=None, verbosity=None) | 0.992000 | 1.000000 | 0.831000 | 0.697000 | 133 |
+| 7 | LogisticRegression(random_state=42) | 0.989000 | 0.994000 | 0.828000 | 0.684000 | 176 |
+| 8 | XGBClassifier(base_score=None, booster=None, colsample_bylevel=None, <br>colsample_bynode=None, colsample_bytree=None, gamma=None, gpu_id=None, <br>importance_type='gain', interaction_constraints=None, learning_rate=None, <br>max_delta_step=None, max_depth=None, min_child_weight=None, missing=nan, <br>monotone_constraints=None, n_estimators=100, n_jobs=None, num_parallel_tree=None, <br>random_state=42, reg_alpha=None, reg_lambda=None, scale_pos_weight=None, <br>subsample=None, tree_method=None, validate_parameters=None, verbosity=None) | 0.991000 | 0.999000 | 0.830000 | 0.658000 | 104 |
+| 9 | LogisticRegression(random_state=42, solver='liblinear') | 0.989000 | 0.994000 | 0.826000 | 0.693000 | 10 |
+| 10 | XGBClassifier(base_score=None, booster=None, colsample_bylevel=None, <br>colsample_bynode=None, colsample_bytree=None, gamma=None, gpu_id=None, <br>importance_type='gain', interaction_constraints=None, learning_rate=None, <br>max_delta_step=None, max_depth=None, min_child_weight=None, missing=nan, <br>monotone_constraints=None, n_estimators=100, n_jobs=None, num_parallel_tree=None, <br>random_state=42, reg_alpha=None, reg_lambda=None, scale_pos_weight=None, subsample=None, <br>tree_method=None, validate_parameters=None, verbosity=None) | 0.990000 | 1.000000 | 0.797000 | 0.673000 | 182 |
+| 11 | LogisticRegression(random_state=42, solver='liblinear') | 0.988000 | 0.993000 | 0.832000 | 0.717000 | 6 |
+| 12 | XGBClassifier(base_score=None, booster=None, colsample_bylevel=None, <br>colsample_bynode=None, colsample_bytree=None, gamma=None, gpu_id=None, <br>importance_type='gain', interaction_constraints=None, learning_rate=None, <br>max_delta_step=None, max_depth=None, min_child_weight=None, missing=nan, <br>monotone_constraints=None, n_estimators=100, n_jobs=None, num_parallel_tree=None, <br>random_state=42, reg_alpha=None, reg_lambda=None, scale_pos_weight=None, <br>subsample=None, tree_method=None, validate_parameters=None, verbosity=None) | 0.990000 | 0.997000 | 0.826000 | 0.683000 | 141 |
+| 13 | LogisticRegression(random_state=42, solver='liblinear') | 0.987000 | 0.992000 | 0.826000 | 0.734000 | 4 |
+| 14 | XGBClassifier(base_score=None, booster=None, colsample_bylevel=None, <br>colsample_bynode=None, colsample_bytree=None, gamma=None, gpu_id=None, <br>importance_type='gain', interaction_constraints=None, learning_rate=None, <br>max_delta_step=None, max_depth=None, min_child_weight=None, missing=nan, <br>monotone_constraints=None, n_estimators=100, n_jobs=None, num_parallel_tree=None, <br>random_state=42, reg_alpha=None, reg_lambda=None, scale_pos_weight=None, subsample=None, <br>tree_method=None, validate_parameters=None, verbosity=None) | 0.992000 | 0.999000 | 0.825000 | 0.715000 | 114 |
+| 15 | LogisticRegression(random_state=42, solver='liblinear') | 0.989000 | 0.993000 | 0.845000 | 0.708000 | 5 |
+| 16 | XGBClassifier(base_score=None, booster=None, colsample_bylevel=None, <br>colsample_bynode=None, colsample_bytree=None, gamma=None, gpu_id=None, <br>importance_type='gain', interaction_constraints=None, learning_rate=None, <br>max_delta_step=None, max_depth=None, min_child_weight=None, missing=nan, <br>monotone_constraints=None, n_estimators=100, n_jobs=None, num_parallel_tree=None, <br>random_state=42, reg_alpha=None, reg_lambda=None, scale_pos_weight=None, subsample=None, <br>tree_method=None, validate_parameters=None, verbosity=None) | 0.990000 | 0.997000 | 0.829000 | 0.690000 | 118 |
+| 17 | LogisticRegression(random_state=42, solver='liblinear') | 0.990000 | 0.994000 | 0.849000 | 0.725000 | 9 |
+| 18 | XGBClassifier(base_score=None, booster=None, colsample_bylevel=None, <br>colsample_bynode=None, colsample_bytree=None, gamma=None, gpu_id=None, <br>importance_type='gain', interaction_constraints=None, learning_rate=None, <br>max_delta_step=None, max_depth=None, min_child_weight=None, missing=nan, <br>monotone_constraints=None, n_estimators=100, n_jobs=None, num_parallel_tree=None, <br>random_state=42, reg_alpha=None, reg_lambda=None, scale_pos_weight=None, subsample=None, <br>tree_method=None, validate_parameters=None, verbosity=None) | 0.991000 | 0.999000 | 0.843000 | 0.704000 | 129 |
+|  |  |  |  |  |  |  |
 
 
-| Score | Status                     | Examples                                                                                                                                                                                                                                         |
-|-------|----------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| 0     | Does not Meet Expectations | 1. Comments and annotations are **absent** <br> 2. There is no clear notebook structure <br> 3. Assumptions are not stated                                                                                                                                       |
-| 1     | Approaching Expectations   | 1. Comments are present but generally unclear or uninformative (e.g., comments do not clarify, explain or interpret the code) <br> 2. There are some structural components like section/subsection headings <br> 3. Assumptions are stated but not justified |
-| 2     | Meets Expectations         | 1. Comments and annotations are clear and informative <br> 2. There is a clear structure to the notebook with title and appropriate sectioning <br> 3. Assumptions are both stated and justified                                                             |
-| 3     | Exceeds Expectations       | 1. Comments and annotations are clear, informative and insightful <br> 2. There is a helpful and cogent structure to the notebook that clarifies the analysis flow <br> 3. Assumptions are stated, justified and backed by evidence or insight               |
+## Data Dictionary
 
-#### Data Structures
-
-Python data structures including lists, dictionaries and imported structures (e.g. DataFrames), are created and used correctly.  The appropriate data structures are used in context.  Data structures are created and accessed using appropriate mechanisms such as comprehensions, slices, filters and copies.
-
-| Score | Status | Examples |
-|-------|----------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| 0 | Does not Meet Expectations | 1. Appropriate data structures are not identified or implemented <br> 2. Data structures are not created appropriately <br> 3. Data structures are not accessed or used effectively |
-| 1 | Approaching Expectations | 1. Contextually appropriate data structures are identified in some but not all instances <br> 2. Data structures are created successfully but lacked efficiency or generality (e.g., structures were hard-coded with values that limits generalization; brute-force vs automatic creation/population of data) <br> 3. Data structures are accessed or used but best practices are not adopted |
-| 2 | Meets Expectations | 1. Contextually appropriate data structures are identified and implemented given the context of the problem <br> 2. Data structures are created in an effective manner <br> 3. Data structures are accessed and used following general programming and Pythonic best practices |
-| 3 | Exceeds Expectations | 1. Use or creation of data structures is clever and insightful <br> 2. Data structures are created in a way that reveals significant Pythonic understanding <br> 3. Data structures are used or applied in clever or insightful ways |
-
-
-#### Python Syntax and Control Flow
-
-Python code is written correctly and follows standard style guidelines and best practices.  There are no runtime errors.  The code is expressive while being reasonably concise.
-
-| Score | Status | Examples |
-|-------|----------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| 0 | Does not Meet Expectations | 1. Code has systemic syntactical issues <br> 2. Code generates incorrect results <br> 3. Code is disorganized and needlessly difficult |
-| 1 | Approaching Expectations | 1. Code is generally correct with some runtime errors <br> 2. Code logic is generally correct but does not produce the desired outcome <br> 3. Code is somewhat organized and follows some stylistic conventions |
-| 2 | Meets Expectations | 1. Code is syntactically correct (no runtime errors) <br> 2. Code generates desired results (logically correct) <br> 3. Code follows general best practices and style guidelines |
-| 3 | Exceeds Expectations | 1. Code adopts clever or advanced syntax <br> 2. Code generates desired results in an easily consumable manner (e.g., results are written to screen, file, pipeline, etc, as appropriate within the flow of the analysis) <br> 3. Code is exceptionally expressive, well formed and organized |
-
-
-#### Probability and Statistics
-
-Descriptive and inferential statistics are calculated and applied where appropriate.  Probabilistic reasoning is demonstrated.  There is a clear understanding of how probability and statistics affects the analysis being performed.
-
-| Score | Status | Examples |
-|-------|----------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| 0 | Does not Meet Expectations | 1. Descriptive statistical calculations are absent <br> 2. Inferential statistical calculations are absent <br> 3. Probabilities or statistics are not relevant given the context of the analysis |
-| 1 | Approaching Expectations | 1. Descriptive statistics are present in some cases <br> 2. Inferential statistics are present in some cases <br> 3. Probabilities or statistics are somewhat relevant to the analysis context |
-| 2 | Meets Expectations | 1. Descriptive statistics are calculated in all relevant situations <br> 2. Inferential statistics are calculated in all relevant situations <br> 3. Probabilities or statistics are relevant to the analysis |
-| 3 | Exceeds Expectations | 1. Descriptive statistics are calculated, interpreted and visualized (where appropriate) <br> 2. Inferential statistics are calculated, interpreted and visualized (where appropriate) <br> 3. Probabilities or statistics are leveraged to draw meaningful or insightful conclusions |
-
-#### Modeling
-
-Data is appropriately prepared for modeling.  Model choice matches the context of the data and the analysis.  Model hyperparameters are optimized.  Model evaluation is robust.  Model results are extracted and explained either visually, numerically or narratively.
-
-| Score | Status | Examples |
-|-------|----------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| 0 | Does not Meet Expectations | 1. Data is not prepared for modeling.<br>2. Models are not implemented or not implemented fully.<br>3. Model hyperparameters are not considered.<br>4. Model evaluation is not performed.<br>5. Model results are unavailable or not extracted. |
-| 1 | Approaching Expectations | 1. Data has some null values, inappropriate types and/or improper handling of categorical labels.<br>2. Model choice is questionable given the objective of the analysis.<br>3. Model hyperparameters are insufficiently or not optimized.<br>4. Model evaluation is performed but the evaluation is not generalizable.<br>5. Model results are extracted but not explained or interpreted. |
-| 2 | Meets Expectations | 1. Data is free from nulls and correctly typed for the given model.<br>2. Model choice is appropriate to the analysis.<br>3. Model hyperparameters are optimally selected.<br>4. Model evaluation reflects generalizeable performance.<br>5. Model results are extracted and explained either visually, numerically or naratively. |
-| 3 | Exceeds Expectations | 1. Data is pristinely prepared with creative or useful feature engineering.<br>2. Model selection is justified and demonstrates an awareness of tradeoffs.<br>3. Model hyperparameters are optimized and the optimization is demonstrated/justified.<br>4. Model evaluation reflects generalizable performance and is interpreted in the context of the analysis.<br>5. Model results are explained, interpreted and related to the overarching analysis goals. |
-
-
-#### Presentation
-
-The goal, methodology and results of your work are presented in a clear, concise and thorough manner.  The presentation is appropriate for the specified audience, and includes relevant and enlightening visual aides as appropriate.
-
-| Score | Status | Examples |
-|-------|----------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| 0 | Does not Meet Expectations | 1. The problem was not well explained or ambiguous. <br> 2. The level of technicality was far above or below the target audience. <br> 3. The presentation went substantially over or under time. <br> 4. The speaker's voice was difficult to hear of unclear. <br> 5. The presentation visuals did not seem to support the talk. |
-| 1 | Approaching Expectations | 1. The problem was stated but was not 100% clear. <br> 2. The level of technicality was was good at times, but too low or too high at other times given the target audience. <br> 3. The presentation was given went slightly over or under time. <br> 4. The speaker's voice was at times difficult to understand. <br> 5. The presentation visuals were generally helpful, but some of them were either too complex or disconnected from the narrative. |
-| 2 | Meets Expectations | 1. The problem was framed appropriately for the audience. <br> 2. The level of technicality was appropriate to the target audience. <br> 3. The presentation was given within the allocated timeframe. <br> 4. The speaker's voice had volume and clarity. <br> 5. The presentation visuals were helpful and supportive. |
-| 3 | Exceeds Expectations | 1. The problem was expertly stated and compelling. <br> 2. The level of technicality was perfect for the target audience. <br> 3. The presentation was given within the allocated timeframe and paced evenly throughout. <br> 4. The speaker's voice was clear, understandable and consistent. <br> 5. The presentation visuals provided distinct insight, supported the speaker from the background, and were not distracting. |
+| Feature | Type | Dataset | Description |
+|---|---|---|---|
+| Id | Integer | Test | The id of the record |
+| Date | Object | Train/Test/Weather | Date that the WNV test is performed for Train/TestDate of weather measurement for Weather |
+| Address | Object | Train/Test | Approximate address of the location of trap. This is used to send to the GeoCoder. |
+| Species | Object | Train/Test | The species of mosquitos |
+| Block | Integer | Train/Test | Block number of address |
+| Street | Object | Train/Test | Street name |
+| Trap | Object | Train/Test | Id of the trap |
+| AddressNumberAndStreet | Object | Train/Test | Approximate address returned from GeoCoder |
+| Latitude | Float | Train/Test/Spray | Latitude returned from GeoCoder for Train/Test <br>Latitude of the spray |
+| Longitude | Float | Train/Test/Spray | Longitude returned from GeoCoder for Train/Test<br>Longitude of the spray |
+| AddressAccuracy | Integer | Train/Test | Accuracy returned from GeoCoder |
+| NumMosquitos | Integer | Train | Number of mosquitoes caught in this trap |
+| WnvPresent | Integer | Train | Whether West Nile Virus was present in these mosquitos. <br>1 means WNV is present, and 0 means not present. |
+| Station | Integer | Weather | 1; automated station without a precipitation descriminator. <br>2; automated station with precipitation descriminator. |
+| Tmax | Integer | Weather | Maximum Temperature |
+| Tmin | Integer | Weather | Minimum Temperature |
+| Tavg | Integer | Weather | Average Temperature |
+| Depart | Integer | Weather | Departure from normal |
+| Dewpoint | Integer | Weather | Average dew point |
+| Wetbulb | Integer | Weather | Average wet bulb |
+| Heat | Integer | Weather | Heating (Season begins with July) |
+| Cool | Integer | Weather | Cooling (Season begins with January) |
+| Sunrise | Object | Weather | Sunrise Time (Calculated, not observed) |
+| Sunset | Object | Weather | Sunset Time (Calculated, not observed) |
+| CodeSum | Object | Weather | Significant Weather Types<br><br>+FC TORNADO/WATERSPOUT<br> FC  FUNNEL CLOUD<br> TS  THUNDERSTORM<br> GR  HAIL<br>RA RAIN<br>DZ DRIZZLE<br>SN SNOW<br>SG SNOW GRAINS<br>GS SMALL HAIL &/OR SNOW PELLETS<br>PL ICE PELLETS<br>IC ICE CRYSTALS<br>FG+ HEAVY FOG (FG & LE.25 MILES VISIBILITY) FG FOG<br>BR MIST<br>UP UNKNOWN PRECIPITATION<br>HZ HAZE<br>FU SMOKE<br>VA VOLCANIC ASH<br>DU WIDESPREAD DUST<br>DS DUSTSTORM<br>PO SAND/DUST WHIRLS<br>SA SAND<br>SS SANDSTORM<br>PY SPRAY<br>SQ SQUALL<br>DR LOW DRIFTING<br>SH SHOWER<br>FZ FREEZING<br>MI SHALLOW<br>PR PARTIAL<br>BC PATCHES<br>BL BLOWING<br>VC VICINITY<br>- LIGHT + HEAVY<br>"NO SIGN" MODERATE |
+| Depth | Integer | Weather | Depth of snow/ice in inches SNOW/ICE (ON GROUND)(1200 UTC)T = TRACEM = MISSING DATA |
+| Water1 | Integer | Weather | WATER EQUIVALENT (1800 UTC) M = MISSING DATA |
+| SnowFall | Float | Weather | SNOWFALL (INCHES AND TENTHS)(2400 LST)*<br>T = TRACEM = MISSING DATA |
+| PrecipTotal | Float | Weather | WATER EQUIVALENT(INCHES & HUNDREDTHS(2400 LST) RAINFALL & MELTED SNOW<br>M = MISSING DATAT = TRACE |
+| StnPressure | Float | Weather | Pressure in inches |
+| SeaLevel | Float | Weather | Average Sea Level Pressure |
+| ResultSpeed | Float | Weather | Resultant Wind Speed |
+| ResultDir | Integer | Weather | Resultant Wind Direction (Whole Degree) |
+| AvgSpeed | Float | Weather | Wing Average Speed |
